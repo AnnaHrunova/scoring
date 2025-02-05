@@ -9,15 +9,19 @@
     <body>
         <form action="#" th:action="@{/scoring/calculate}" th:object="${request}" method="post">
 
-            <label for="amount">Amount</label>
-            <input type="text" th:field="*{amount}" id="amount" placeholder="Amount">
-            <span th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
+            <div>
+                <label for="amount">Amount</label>
+                <input type="text" th:field="*{amount}" id="amount" placeholder="Amount">
+                <div th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}" class="error"></div>
+            </div>
 
-            <label for="term">Term</label>
-            <input type="text" th:field="*{term}" id="term" placeholder="Term">
-            <span th:if="${#fields.hasErrors('term')}" th:errors="*{term}"></span>
+            <div>
+                <label for="term">Term</label>
+                <input type="text" th:field="*{term}" id="term" placeholder="Term">
+                <div th:if="${#fields.hasErrors('term')}" th:errors="*{term}" class="error"></div>
+            </div>
 
-            <input type="submit" value="Calculate">
+            <button type="submit">Calculate</button>
         </form>
     </body>
 </html>

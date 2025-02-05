@@ -32,14 +32,14 @@ input[type="text"] {
     font-size: 14px;
 }
 
-span {
+.error {
     color: red;
     font-size: 12px;
     display: block;
     margin-top: 5px;
 }
 
-input[type="submit"] {
+button {
     width: 100%;
     background-color: #007bff;
     color: white;
@@ -50,8 +50,4 @@ input[type="submit"] {
     font-size: 16px;
     border-radius: 4px;
     transition: background 0.3s ease;
-}
-
-input[type="submit"]:hover {
-    background-color: #0056b3;
 }

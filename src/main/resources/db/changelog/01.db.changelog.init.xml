@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="anna.hrunova" id="org.inbank.scoring.create_schema">
+        <sql>
+            create schema if not exists scoring;
+        </sql>
+    </changeSet>
+    <changeSet author="anna.hrunova" id="org.inbank.scoring.add_tables">
+        <sql>
+            create table scoring.customer (
+                id            uuid not null primary key,
+                personal_id   varchar(255) unique,
+                is_ineligible boolean,
+                created_date  timestamp(6) with time zone not null,
+                updated_date  timestamp(6) with time zone,
+                created_by    varchar(255) not null,
+                updated_by    varchar(255)
+            );
+
+            create table scoring.journal (
+                id                  uuid not null primary key,
+                amount              numeric(38, 2),
+                term                integer,
+                is_approve          boolean,
+                created_date        timestamp(6) with time zone not null,
+                updated_date        timestamp(6) with time zone,
+                created_by          varchar(255) not null,
+                details             varchar(255),
+                updated_by          varchar(255),
+                customer_id_journal uuid  not null
+                    constraint fk_journal_customer
+                        references scoring.customer
+            );
+
+            create table scoring_profile
+            (
+                id                  uuid not null primary key,
+                financial_capacity  integer,
+                is_active           boolean,
+                created_date        timestamp(6) with time zone not null,
+                updated_date        timestamp(6) with time zone,
+                created_by          varchar(255) not null,
+                updated_by          varchar(255),
+                customer_id_scoring uuid not null
+                    constraint fk_scoring_customer
+                        references scoring.customer
+            );
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
