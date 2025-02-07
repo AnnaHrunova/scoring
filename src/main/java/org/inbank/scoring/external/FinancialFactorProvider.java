@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class FinancialFactorProvider {
 
-    Integer getFinancialFactor(String personalId) {
+    public Integer getFinancialFactor(String personalId) {
         var lastDigit = Character.getNumericValue(personalId.charAt(personalId.length() - 1));
         return switch (lastDigit) {
             case 1 -> 50;

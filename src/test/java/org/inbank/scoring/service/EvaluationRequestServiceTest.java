@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class JournalServiceTest extends BaseIntegrationTest {
+class EvaluationRequestServiceTest extends BaseIntegrationTest {
 
     @Autowired
-    private JournalService subject;
+    private EvaluationRequestService subject;
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -26,11 +26,10 @@ class JournalServiceTest extends BaseIntegrationTest {
         var newCustomer = subject.prepareCustomer(customerPersonalId, 100);
 
         var savedCustomer = customerRepository.findById(newCustomer);
-        var savedScoringProfile = scoringProfileRepository.findFirstByCustomerPersonalIdOrderByCreatedDateDesc(customerPersonalId);
-
         assertTrue(savedCustomer.isPresent());
-        assertTrue(savedScoringProfile.isPresent());
-        assertEquals(100, savedScoringProfile.get().getFinancialCapacity());
+
+        var savedScoringProfile = savedCustomer.get().getScoringProfile();
+        assertEquals(100, savedScoringProfile.getFinancialCapacity());
     }
 
 }

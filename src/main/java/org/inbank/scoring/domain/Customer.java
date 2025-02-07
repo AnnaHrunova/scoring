@@ -15,6 +15,11 @@ public class Customer extends BaseEntity{
     @Column(name = "personal_id", unique = true)
     private String personalId;
 
-    @Column(name = "is_ineligible")
-    private boolean isIneligible;
+    @OneToOne
+    @JoinColumn(
+            name = "customer_id_scoring",
+            foreignKey = @ForeignKey(name = "fk_customer_scoring"),
+            nullable = false)
+    private ScoringProfile scoringProfile;
+
 }

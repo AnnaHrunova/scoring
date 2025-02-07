@@ -15,13 +15,7 @@ public class ScoringProfile extends BaseEntity {
     @Column(name = "financial_capacity")
     private Integer financialCapacity;
 
-    @Column(name = "is_active")
-    private boolean isActive;
+    @Column(name = "is_ineligible")
+    private boolean isIneligible;
 
-    @ManyToOne
-    @JoinColumn(
-            name = "customer_id_scoring",
-            foreignKey = @ForeignKey(name = "fk_scoring_customer"),
-            nullable = false)
-    private Customer customer;
 }
