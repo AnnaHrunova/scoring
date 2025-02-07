@@ -43,7 +43,7 @@ public class ScoringCalculationService {
         var evaluationResult = scoreProvider.evaluate(financialFactor, amount, term);
        evaluationRequestService.finishPurchaseApprovalRequest(requestUUID, evaluationResult);
 
-       return new PurchaseApprovalResult(evaluationResult.getLeft(), evaluationResult.getMiddle(), "", evaluationResult.getRight());
+       return evaluationResult;
 
     }
 }

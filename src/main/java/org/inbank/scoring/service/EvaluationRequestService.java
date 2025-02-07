@@ -2,11 +2,10 @@ package org.inbank.scoring.service;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.tuple.Triple;
+import org.inbank.scoring.api.PurchaseApprovalResult;
 import org.inbank.scoring.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -56,11 +55,11 @@ public class EvaluationRequestService {
     }
 
     @Transactional
-    public void finishPurchaseApprovalRequest(UUID requestId, Triple<Integer, Integer, BigDecimal> evaluationResult) {
+    public void finishPurchaseApprovalRequest(UUID requestId, PurchaseApprovalResult evaluationResult) {
         var request = evaluationRequestRepository.findById(requestId).orElseThrow();
-        request.setRequestedAmount(evaluationResult.getLeft());
-        request.setRequestedTerm(evaluationResult.getMiddle());
-        request.setApprovalScore(evaluationResult.getRight());
+        request.setApprovedAmount(evaluationResult.approvedAmount());
+        request.setApprovedTerm(evaluationResult.approvedTerm());
+        request.setApprovalScore(evaluationResult.approvalScore());
         evaluationRequestRepository.save(request);
     }
 

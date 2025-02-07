@@ -3,6 +3,8 @@ package org.inbank.scoring.service.validator;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 public class AmountValidator implements
         ConstraintValidator<AmountConstraint, String> {
 
@@ -13,6 +15,14 @@ public class AmountValidator implements
     @Override
     public boolean isValid(String initAmount,
                            ConstraintValidatorContext cxt) {
+
+        if (isBlank(initAmount)) {
+            cxt.disableDefaultConstraintViolation();
+            cxt.buildConstraintViolationWithTemplate("Amount must not be blank!")
+                    .addConstraintViolation();
+            return false;
+        }
+
         try {
             var amount = Integer.parseInt(initAmount);
             if (amount < 200 || amount > 5000) {

@@ -3,6 +3,7 @@ package org.inbank.scoring.service.validator;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class TermValidator implements
@@ -15,6 +16,14 @@ public class TermValidator implements
     @Override
     public boolean isValid(String initTerm,
                            ConstraintValidatorContext cxt) {
+
+        if (isBlank(initTerm)) {
+            cxt.disableDefaultConstraintViolation();
+            cxt.buildConstraintViolationWithTemplate("Term must not be blank!")
+                    .addConstraintViolation();
+            return false;
+        }
+
         try {
             var term = Integer.parseInt(initTerm);
             if (term < 6 || term > 24) {

@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Target( { ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AmountConstraint {
-    String message() default "Invalid amount";
+    String message() default "Invalid approvedAmount";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

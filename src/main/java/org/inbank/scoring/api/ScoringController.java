@@ -30,9 +30,10 @@ public class ScoringController {
             return "index";
         }
         var response = scoringCalculationService.evaluate(request);
-        model.addAttribute("approvedAmount", response.amount());
-        model.addAttribute("approvedTerm", response.term());
+        model.addAttribute("approvedAmount", response.approvedAmount());
+        model.addAttribute("approvedTerm", response.approvedTerm());
         model.addAttribute("approvalScore", response.approvalScore());
+        model.addAttribute("message", response.message());
 
         return "result";
     }
