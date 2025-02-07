@@ -22,13 +22,13 @@ public class EvaluationRequest extends BaseEntity {
     private Customer customer;
 
     @Column(name = "requested_amount", nullable = false)
-    private BigDecimal requestedAmount;
+    private Integer requestedAmount;
 
     @Column(name = "requested_term", nullable = false)
     private Integer requestedTerm;
 
     @Column(name = "approved_amount")
-    private BigDecimal approvedAmount;
+    private Integer approvedAmount;
 
     @Column(name = "approved_term")
     private Integer approvedTerm;

@@ -2,7 +2,7 @@ package org.inbank.scoring.api;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.inbank.scoring.service.JournalService;
+import org.inbank.scoring.service.ScoringCalculationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class ScoringController {
 
-    private final JournalService journalService;
+    private final ScoringCalculationService scoringCalculationService;
 
     @GetMapping
     public String init(Model model) {
@@ -29,7 +29,11 @@ public class ScoringController {
         if (result.hasErrors()) {
             return "index";
         }
-        journalService.prepareCustomer("112233-12345", 50);
-        return "redirect:/approve";
+        var response = scoringCalculationService.evaluate(request);
+        model.addAttribute("approvedAmount", response.amount());
+        model.addAttribute("approvedTerm", response.term());
+        model.addAttribute("approvalScore", response.approvalScore());
+
+        return "result";
     }
 }

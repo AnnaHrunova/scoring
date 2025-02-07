@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Scoring</title>
+    <link th:href="@{/styles/main.css}" rel="stylesheet" />
+</head>
+
+<body>
+    <div>
+        <div th:text="${approvedAmount}"></div>
+        <div th:text="${approvedTerm}"></div>
+        <div th:text="${approvalScore}"></div>
+
+        <div th:if="${approvalScore > 1}">SUCCESS</div>
+        <div th:if="${approvalScore < 1}">REJECT</div>
+    </div>
+</body>
+</html>

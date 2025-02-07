@@ -22,8 +22,8 @@ class EvaluationRequestServiceTest extends BaseIntegrationTest {
 
     @Test
     void shouldInitializeCustomerWithScoringProfile() {
-        var customerPersonalId = "112233-56789";
-        var newCustomer = subject.prepareCustomer(customerPersonalId, 100);
+        var customerPersonId = "112233-56789";
+        var newCustomer = subject.prepareCustomer(customerPersonId, 100);
 
         var savedCustomer = customerRepository.findById(newCustomer);
         assertTrue(savedCustomer.isPresent());

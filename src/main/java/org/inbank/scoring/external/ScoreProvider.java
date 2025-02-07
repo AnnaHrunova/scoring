@@ -1,11 +1,6 @@
 package org.inbank.scoring.external;
 
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.NotNull;
 import org.apache.commons.lang3.tuple.Triple;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -14,18 +9,18 @@ import java.math.RoundingMode;
 @Service
 public class ScoreProvider {
 
-    public Triple<BigDecimal, Integer, BigDecimal> evaluate(int financialFactor, BigDecimal amount, Integer term) {
+    public Triple<Integer, Integer, BigDecimal> evaluate(int financialFactor, int amount, Integer term) {
         var approvalScore = calculateApprovalScore(financialFactor, amount, term);
         if (approvalScore.compareTo(BigDecimal.ZERO) > 0) {
             return Triple.of(amount, term, approvalScore);
         }
 
-        return Triple.of(BigDecimal.ZERO, 0, approvalScore);
+        return Triple.of(0, 0, approvalScore);
     }
 
-    private BigDecimal calculateApprovalScore(int financialFactor, BigDecimal amount, Integer term) {
+    private BigDecimal calculateApprovalScore(int financialFactor, int amount, Integer term) {
         return BigDecimal.valueOf(financialFactor)
-                .divide(amount, RoundingMode.HALF_UP)
+                .divide(BigDecimal.valueOf(amount), 3, RoundingMode.CEILING)
                 .multiply(BigDecimal.valueOf(term));
     }
 }

@@ -10,6 +10,12 @@
         <form action="#" th:action="@{/scoring/calculate}" th:object="${request}" method="post">
 
             <div>
+                <label for="personId">PersonId</label>
+                <input type="text" th:field="*{personId}" id="personId" placeholder="PersonId">
+                <div th:if="${#fields.hasErrors('personId')}" th:errors="*{personId}" class="error"></div>
+            </div>
+
+            <div>
                 <label for="amount">Amount</label>
                 <input type="text" th:field="*{amount}" id="amount" placeholder="Amount">
                 <div th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}" class="error"></div>

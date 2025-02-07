@@ -12,8 +12,8 @@ import lombok.*;
 @Table(name = "customer", schema = ScoringSchema.NAME)
 public class Customer extends BaseEntity{
 
-    @Column(name = "personal_id", unique = true)
-    private String personalId;
+    @Column(name = "person_id", unique = true)
+    private String personId;
 
     @OneToOne
     @JoinColumn(

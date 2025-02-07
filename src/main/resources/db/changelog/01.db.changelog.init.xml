@@ -25,7 +25,7 @@
 
             create table scoring.customer (
                 id            uuid not null primary key,
-                personal_id   varchar(255) unique,
+                person_id   varchar(255) unique,
                 created_date  timestamp(6) with time zone not null,
                 updated_date  timestamp(6) with time zone,
                 created_by    varchar(255) not null,
@@ -37,9 +37,9 @@
 
             create table scoring.evaluation_request (
                 id                  uuid not null primary key,
-                requested_amount    numeric(38, 2),
+                requested_amount    integer,
                 requested_term      integer,
-                approved_amount     numeric(38, 2),
+                approved_amount     integer,
                 approved_term       integer,
                 result              varchar(255),
                 created_date        timestamp(6) with time zone not null,
