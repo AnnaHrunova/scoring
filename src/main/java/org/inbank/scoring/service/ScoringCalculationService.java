@@ -9,6 +9,8 @@ import org.inbank.scoring.external.FinancialFactorProvider;
 import org.inbank.scoring.external.ScoreProvider;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -22,7 +24,10 @@ public class ScoringCalculationService {
 
     public PurchaseApprovalResult evaluate(@Valid PurchaseApprovalRequest request) {
         var personId = request.getPersonId();
-
+        var hasActiveApprovalRequest = evaluationRequestService.hasActiveRequest(personId);
+        if (hasActiveApprovalRequest) {
+            return new PurchaseApprovalResult(0, 0, "" , BigDecimal.ZERO);
+        }
         if (evaluationRequestService.isCustomerIneligible(request.getPersonId())) {
             log.error("Ineligible customer with personId={}", personId);
             throw new RuntimeException(String.format("Ineligible customer with personId=%s", personId));

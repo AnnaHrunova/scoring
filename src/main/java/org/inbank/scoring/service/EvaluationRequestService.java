@@ -6,6 +6,7 @@ import org.inbank.scoring.api.PurchaseApprovalResult;
 import org.inbank.scoring.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -42,6 +43,12 @@ public class EvaluationRequestService {
                 .map(Customer::getScoringProfile)
                 .stream()
                 .anyMatch(ScoringProfile::isIneligible);
+    }
+
+    public boolean hasActiveRequest(String personId) {
+        return evaluationRequestRepository.findFirstByCustomerPersonIdOrderByCreatedDateDesc(personId)
+                .map(req -> req.getCreatedDate().isAfter(OffsetDateTime.now().minusHours(5)))
+                .isPresent();
     }
 
     @Transactional
