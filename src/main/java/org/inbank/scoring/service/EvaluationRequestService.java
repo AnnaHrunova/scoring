@@ -60,6 +60,7 @@ public class EvaluationRequestService {
                 .anyMatch(ScoringProfile::isIneligible);
     }
 
+    //Prevent making requests too often (current request remains 'active' for 5h - for demo purposes)
     public PurchaseApprovalResult hasActiveRequest(String personId) {
         return evaluationRequestRepository.findFirstByCustomerPersonIdOrderByCreatedDateDesc(personId)
                 .filter(req -> req.getCreatedDate().isAfter(OffsetDateTime.now().minusHours(5)))

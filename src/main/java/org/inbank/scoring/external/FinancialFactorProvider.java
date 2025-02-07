@@ -2,6 +2,7 @@ package org.inbank.scoring.external;
 
 import org.springframework.stereotype.Service;
 
+/* For mocking customer financial factor calculation */
 @Service
 public class FinancialFactorProvider {
 

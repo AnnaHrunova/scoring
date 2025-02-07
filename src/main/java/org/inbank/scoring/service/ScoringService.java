@@ -32,6 +32,7 @@ public class ScoringService {
             return new PurchaseApprovalResult(null, null, null, null, true);
         }
 
+        //Prevent making requests too often (current request remains 'active' for 5h - for demo purposes)
         var currentApprovalResult = evaluationRequestService.hasActiveRequest(personId);
         if (currentApprovalResult != null) {
             log.info("Customer with personId={} already has an active purchase approval request", personId);
@@ -54,6 +55,7 @@ public class ScoringService {
                 evaluationRequestService.prepareCustomer(personId, financialFactor);
             }
         }
+
         var amount = Integer.parseInt(request.getAmount());
         var term = Integer.parseInt(request.getTerm());
         var requestUUID = evaluationRequestService.savePurchaseApprovalRequest(personId, amount, term);

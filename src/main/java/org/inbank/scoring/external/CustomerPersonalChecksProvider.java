@@ -2,6 +2,8 @@ package org.inbank.scoring.external;
 
 import org.springframework.stereotype.Service;
 
+/* For mocking customer personal checks */
+
 @Service
 public class CustomerPersonalChecksProvider {
 

@@ -6,28 +6,33 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+/* For mocking recommended amount and term adjustments if necessary */
 @Service
 public class ScoreCalculatorProvider {
 
     public PurchaseApprovalResult evaluate(int financialFactor, int amount, Integer term) {
         var approvalScore = calculateApprovalScore(financialFactor, amount, term);
 
+        // Request approved, original amount approved
         if (approvalScore.compareTo(BigDecimal.ONE) == 0) {
             var msg = String.format("Your requested amount=%s was approved.", amount);
             return new PurchaseApprovalResult(amount, term, msg, approvalScore, false);
         }
 
+        // Request approved, higher amount recommended
         if (approvalScore.compareTo(BigDecimal.ONE) >= 0) {
             var extendedAmount = calculateExtendedAmount(amount);
             var msg = String.format("Your requested amount=%s was approved. Your recommended amount is %s.", amount, extendedAmount);
             return new PurchaseApprovalResult(extendedAmount, term, msg, approvalScore, false);
         }
 
+        // Request rejected, lower amount recommended
         var reducedAmount = calculateReducedAmount(amount);
         if (approvalScore.compareTo(new BigDecimal("0.5")) >= 0) {
             var msg = String.format("Your requested amount=%s was rejected. Your recommended amount is %s.", amount, reducedAmount);
             return new PurchaseApprovalResult(reducedAmount, term, msg, approvalScore, false);
         } else {
+            // Request rejected, extended term recommended
             var extendedTerm = calculateExtendedTerm(term);
             var msg = String.format("Your requested amount=%s for term=%s was rejected. Your recommended amount is %s and term is: %s.", amount, term, reducedAmount, extendedTerm);
             return new PurchaseApprovalResult(reducedAmount, extendedTerm, msg, approvalScore, false);
