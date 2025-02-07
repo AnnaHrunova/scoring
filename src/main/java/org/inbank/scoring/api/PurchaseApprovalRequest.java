@@ -12,12 +12,12 @@ import org.inbank.scoring.service.validator.TermConstraint;
 @NoArgsConstructor
 public class PurchaseApprovalRequest {
 
+    @PersonIdConstraint
+    private String personId;
+
     @AmountConstraint
     private String amount;
 
     @TermConstraint
     private String term;
-
-    @PersonIdConstraint
-    private String personId;
 }

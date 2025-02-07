@@ -2,7 +2,7 @@ package org.inbank.scoring.api;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.inbank.scoring.service.ScoringCalculationService;
+import org.inbank.scoring.service.ScoringService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class ScoringController {
 
-    private final ScoringCalculationService scoringCalculationService;
+    private final ScoringService scoringCalculationService;
 
     @GetMapping
     public String init(Model model) {
@@ -29,12 +29,18 @@ public class ScoringController {
         if (result.hasErrors()) {
             return "index";
         }
-        var response = scoringCalculationService.evaluate(request);
-        model.addAttribute("approvedAmount", response.approvedAmount());
-        model.addAttribute("approvedTerm", response.approvedTerm());
-        model.addAttribute("approvalScore", response.approvalScore());
-        model.addAttribute("message", response.message());
-
+        var scoringResult = scoringCalculationService.evaluate(request);
+        prepareView(model, scoringResult);
         return "result";
+    }
+
+    private static void prepareView(Model model, PurchaseApprovalResult response) {
+        if (!response.isIneligibleCustomer()) {
+            model.addAttribute("approvedAmount", response.approvedAmount());
+            model.addAttribute("approvedTerm", response.approvedTerm());
+            model.addAttribute("approvalScore", response.approvalScore());
+            model.addAttribute("message", response.message());
+        }
+        model.addAttribute("isIneligible", response.isIneligibleCustomer());
     }
 }

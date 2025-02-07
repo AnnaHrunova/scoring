@@ -11,5 +11,4 @@ public class LocalScoringApplication {
 				.with(LocalDevTestcontainersConfig.class)
 				.run(args);
 	}
-
 }

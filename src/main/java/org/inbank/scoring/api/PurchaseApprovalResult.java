@@ -5,5 +5,6 @@ import java.math.BigDecimal;
 public record PurchaseApprovalResult(Integer approvedAmount,
                                      Integer approvedTerm,
                                      String message,
-                                     BigDecimal approvalScore
+                                     BigDecimal approvalScore,
+                                     boolean isIneligibleCustomer
 ) { }

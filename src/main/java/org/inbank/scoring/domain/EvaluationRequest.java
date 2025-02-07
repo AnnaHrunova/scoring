@@ -33,10 +33,6 @@ public class EvaluationRequest extends BaseEntity {
     @Column(name = "approved_term")
     private Integer approvedTerm;
 
-    @Column
-    @Enumerated(EnumType.STRING)
-    private ScoringResult result;
-
     @Column(name = "approval_score")
     private BigDecimal approvalScore;
 }

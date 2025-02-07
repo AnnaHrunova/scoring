@@ -1,22 +1,35 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Scoring</title>
-    <link th:href="@{/styles/main.css}" rel="stylesheet" />
+    <link th:href="@{/styles/main.css}" rel="stylesheet"/>
 </head>
 
 <body>
-    <div>
-        <div th:text="${approvedAmount}"></div>
-        <div th:text="${approvedTerm}"></div>
-        <div th:text="${approvalScore}"></div>
+    <div th:if="${isIneligible}">
+        <div class="ineligible">Ineligible customer rejected!</div>
+    </div>
 
-        <div th:if="${approvalScore > 1}">SUCCESS</div>
-        <div th:if="${approvalScore < 1}">REJECT</div>
+    <div th:unless="${isIneligible}">
+        <div th:if="${approvalScore >= 1}" class="approve">APPROVE!</div>
+        <div th:if="${approvalScore < 1}" class="reject">REJECT!</div>
+        <div th:text="${message}" class="info"></div>
 
-        <div th:text="${message}"></div>
+        <div>
+            <label>Approved Amount</label>
+            <span th:text="${approvedAmount}"></span>
+        </div>
 
+        <div>
+            <label>Approved Term</label>
+            <span th:text="${approvedTerm}"></span>
+        </div>
+
+        <div>
+            <label>Approval Score</label>
+            <span th:text="${approvalScore}"></span>
+        </div>
     </div>
 </body>
 </html>

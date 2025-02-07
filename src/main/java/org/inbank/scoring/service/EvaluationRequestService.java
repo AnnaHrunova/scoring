@@ -4,8 +4,10 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.inbank.scoring.api.PurchaseApprovalResult;
 import org.inbank.scoring.domain.*;
+import org.inbank.scoring.exception.MissingDataException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,6 +33,19 @@ public class EvaluationRequestService {
         return customerRepository.save(customer).getId();
     }
 
+    @Transactional
+    public UUID prepareIneligibleCustomer(String personId) {
+        var scoringProfile = new ScoringProfile();
+        scoringProfile.setIneligible(true);
+        var savedScoringProfile = scoringProfileRepository.save(scoringProfile);
+
+        var customer = new Customer();
+        customer.setPersonId(personId);
+        customer.setScoringProfile(savedScoringProfile);
+
+        return customerRepository.save(customer).getId();
+    }
+
     public Optional<Integer> getCustomerFinancialFactor(String personId) {
         return customerRepository.findByPersonId(personId)
                 .map(Customer::getScoringProfile)
@@ -45,15 +60,17 @@ public class EvaluationRequestService {
                 .anyMatch(ScoringProfile::isIneligible);
     }
 
-    public boolean hasActiveRequest(String personId) {
+    public PurchaseApprovalResult hasActiveRequest(String personId) {
         return evaluationRequestRepository.findFirstByCustomerPersonIdOrderByCreatedDateDesc(personId)
-                .map(req -> req.getCreatedDate().isAfter(OffsetDateTime.now().minusHours(5)))
-                .isPresent();
+                .filter(req -> req.getCreatedDate().isAfter(OffsetDateTime.now().minusHours(5)))
+                .map(req -> new PurchaseApprovalResult(req.getApprovedAmount(), req.getApprovedTerm(), "Latest active purchase approval request", req.getApprovalScore(), false))
+                .orElse(null);
     }
 
     @Transactional
     public UUID savePurchaseApprovalRequest(String personId, int requestedAmount, Integer requestedTerm) {
-        var customer = customerRepository.findByPersonId(personId).orElseThrow();
+        var customer = customerRepository.findByPersonId(personId)
+                .orElseThrow(() -> new MissingDataException("customer", "personId=" + personId));
         var request = new EvaluationRequest();
         request.setRequestedAmount(requestedAmount);
         request.setRequestedTerm(requestedTerm);
@@ -63,11 +80,11 @@ public class EvaluationRequestService {
 
     @Transactional
     public void finishPurchaseApprovalRequest(UUID requestId, PurchaseApprovalResult evaluationResult) {
-        var request = evaluationRequestRepository.findById(requestId).orElseThrow();
+        var request = evaluationRequestRepository.findById(requestId)
+                .orElseThrow(() -> new MissingDataException("evaluation_request", "id=" + requestId));
         request.setApprovedAmount(evaluationResult.approvedAmount());
         request.setApprovedTerm(evaluationResult.approvedTerm());
         request.setApprovalScore(evaluationResult.approvalScore());
         evaluationRequestRepository.save(request);
     }
-
 }
